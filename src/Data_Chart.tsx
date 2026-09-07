@@ -1,8 +1,8 @@
-import { CategoryScale, LinearScale, LineElement, PointElement, Tooltip,Legend,Chart as ChartJS } from 'chart.js';
+import { CategoryScale, LinearScale, LineElement, PointElement, Title, Chart as ChartJS } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
 // Register the scales and elements you need
-ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement,Tooltip,Legend);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title);
 
 const border_colors=["red","blue","green"];
 const background_colors=["darkred","darkblue","darkgreen"];
@@ -10,7 +10,9 @@ const background_colors=["darkred","darkblue","darkgreen"];
 function Data_Chart(props: any)
 {
     const data_dictionary=props.data_dictionary;
-    console.log(data_dictionary);
+    const title_lines=props.title.split("<br>");
+    const title_lines_mapped=title_lines.map((line: any)=><>{line}<br></br></>);
+    console.log(title_lines);
 
     const labels=props.month_columns;
     let datasets=[];
@@ -31,13 +33,33 @@ function Data_Chart(props: any)
 
     const data = {
     labels: labels,
-    datasets: datasets,
+    datasets: datasets
+    };
+
+    const options = {
+        plugins: {
+          title: {
+            display: true,
+            // Pass an array of strings for multiple lines
+            text: title_lines,
+            font: {
+              size: 16
+            },
+            padding: {
+              top: 10,
+              bottom: 30
+            }
+          }
+        }
     };
 
     return (<>
-    <h2>{props.title}</h2>
+    <h2>
+    {title_lines_mapped}
+    </h2>
     <Line
     data={data}
+    options={options}
     />
     </>);
 }

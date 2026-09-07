@@ -38,7 +38,7 @@ function App() {
 
       let charts_temp=[];
       let data_dictionary:Record<string,any>={"Historical Average Monthly Heat":historical_average_data,"2025 Monthly Heat":current_average_data}
-      let comparison_chart=<Data_Chart title="2025 Monthly Heat vs Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
+      let comparison_chart=<Data_Chart title="2025 Monthly Heat vs<br>Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
       charts_temp.push(comparison_chart);
 
       let difference_data:Record<string,any>={};
@@ -47,7 +47,7 @@ function App() {
         difference_data[month_column]=current_average_data[month_column]-historical_average_data[month_column];
       }
       data_dictionary={"Heat Difference":difference_data};
-      let difference_chart=<Data_Chart title="2025 Monthly Heat vs Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
+      let difference_chart=<Data_Chart title="2025 Monthly Heat vs<br>Historical Average Monthly Heat Difference" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
       charts_temp.push(difference_chart);
 
       setCharts(charts_temp);

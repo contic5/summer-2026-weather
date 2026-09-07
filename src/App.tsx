@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import get_data from './read_excel';
+import Data_Chart from './Data_Chart';
+import { to_averages_dictionary } from './shared';
+
+const month_columns=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
 function App() {
   const [excel_data, setExcelData] = useState<Record<any,any>[]>([]);
-  const [table_headings,setTableHeadings]=useState<React.JSX.Element[]>();
-  const [table_rows,setTableRows]=useState<React.JSX.Element[]>();
+  const [charts,setCharts]=useState<React.JSX.Element[]>();
 
   useEffect(()=>
   {
@@ -12,7 +16,7 @@ function App() {
     {
       if(excel_data.length==0)
       {
-        const excel_data_temp=await get_data("MOCK_DATA.xlsx","data_short");
+        const excel_data_temp=await get_data("US-Temperature-By-State.xlsx","Max-Temperature-Data");
         console.log(excel_data_temp);
         setExcelData(excel_data_temp);
       }
@@ -20,49 +24,40 @@ function App() {
     async_wrapper();
   },[]);
 
-  //Set up data entry cell.
-  function handle_cell(value:any,column_number:number,row_number:number)
-  {
-    return (<td key={`td_${row_number},${column_number}`}>{value}</td>);
-  }
-
-  //Loop through each input row
-  function handle_row(row:Record<any, any>,row_number:number)
-  {
-    let values=Object.values(row);
-    return(<tr key={ `tr_${row_number}`}>
-    {
-      values.map((value: any,column_number: number) => handle_cell(value,column_number,row_number))
-    }
-    </tr>);
-  }
-
   useEffect(()=>
   {
     if(excel_data.length>0)
     {
       console.log(excel_data);
-      let columns=Object.keys(excel_data[0]);
-      const table_headings_temp=columns.map(column=><th key={`th_${column}`}>{column}</th>);
-      setTableHeadings(table_headings_temp);
+      let historical_average_data=to_averages_dictionary(excel_data,month_columns);
+      console.log(historical_average_data);
 
-      const table_rows_temp=excel_data.map((row,row_number)=>handle_row(row,row_number));
-      setTableRows(table_rows_temp);
+      let current_data=excel_data.filter(row=>row["Year"]==2025);
+      let current_average_data=to_averages_dictionary(current_data,month_columns);
+      console.log(current_average_data);
+
+      let charts_temp=[];
+      let data_dictionary:Record<string,any>={"Historical Average Monthly Heat":historical_average_data,"2025 Monthly Heat":current_average_data}
+      let comparison_chart=<Data_Chart title="2025 Monthly Heat vs Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
+      charts_temp.push(comparison_chart);
+
+      let difference_data:Record<string,any>={};
+      for(let month_column of month_columns)
+      {
+        difference_data[month_column]=current_average_data[month_column]-historical_average_data[month_column];
+      }
+      data_dictionary={"Heat Difference":difference_data};
+      let difference_chart=<Data_Chart title="2025 Monthly Heat vs Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
+      charts_temp.push(difference_chart);
+
+      setCharts(charts_temp);
     }
   },[excel_data])
+
   return (
     <>
     <h1>React Excel Template</h1>
-    <table className="table table-striped">
-    <thead>
-    <tr>
-    {table_headings}
-    </tr>
-    </thead>
-    <tbody>
-    {table_rows}
-    </tbody>
-    </table>
+    {charts}
     </>
   )
 }

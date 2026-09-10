@@ -4,7 +4,7 @@ import get_data from './read_excel';
 import Data_Chart from './Data_Chart';
 import { to_averages_dictionary } from './shared';
 
-const month_columns=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+//const month_columns=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const summer_columns=["Jun","Jul","Aug"];
 
 function App() {

@@ -1,8 +1,8 @@
-import { CategoryScale, LinearScale, LineElement, PointElement, Title, Chart as ChartJS } from 'chart.js';
+import { CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Chart as ChartJS } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
 // Register the scales and elements you need
-ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip);
 
 const border_colors=["red","blue","green"];
 const background_colors=["darkred","darkblue","darkgreen"];

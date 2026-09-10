@@ -56,7 +56,7 @@ function App() {
 
   return (
     <>
-    <h1>React Excel Template</h1>
+    <h1>Summer 2026 Weather</h1>
     {charts}
     </>
   )

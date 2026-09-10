@@ -14,7 +14,21 @@ function Data_Chart(props: any)
     const title_lines_mapped=title_lines.map((line: any)=><>{line}<br></br></>);
     console.log(title_lines);
 
-    const labels=props.month_columns;
+    let labels=props.month_columns;
+    let min_length=labels.length;
+    for(let key in data_dictionary)
+    {
+      for(let i=0;i<labels.length;i++)
+      {
+        if(data_dictionary[key][labels[i]]<-9)
+        {
+          min_length=Math.min(min_length,i);
+          break;
+        }
+      }
+    }
+    labels=labels.slice(0,min_length);
+
     let datasets=[];
     let color_index=0;
     for(let key in data_dictionary)
@@ -49,6 +63,11 @@ function Data_Chart(props: any)
               top: 10,
               bottom: 30
             }
+          }
+        },
+        scales:{
+          y:{
+            min:0
           }
         }
     };

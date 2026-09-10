@@ -4,8 +4,8 @@ import get_data from './read_excel';
 import Data_Chart from './Data_Chart';
 import { to_averages_dictionary } from './shared';
 
-//const month_columns=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const summer_columns=["Jun","Jul","Aug"];
+const month_columns=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+//const summer_columns=["Jun","Jul","Aug"];
 
 function App() {
   const [excel_data, setExcelData] = useState<Record<any,any>[]>([]);
@@ -30,25 +30,25 @@ function App() {
     if(excel_data.length>0)
     {
       console.log(excel_data);
-      let historical_average_data=to_averages_dictionary(excel_data,summer_columns);
+      let historical_average_data=to_averages_dictionary(excel_data,month_columns);
       console.log(historical_average_data);
 
-      let current_data=excel_data.filter(row=>row["Year"]==2026);
-      let current_average_data=to_averages_dictionary(current_data,summer_columns);
+      let data_2026=excel_data.filter(row=>row["Year"]==2026);
+      let current_average_data=to_averages_dictionary(data_2026,month_columns);
       console.log(current_average_data);
 
       let charts_temp=[];
       let data_dictionary:Record<string,any>={"Historical Average Monthly Heat":historical_average_data,"2026 Monthly Heat":current_average_data}
-      let comparison_chart=<Data_Chart title="2026 Monthly Heat vs<br>Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={summer_columns} ></Data_Chart>
+      let comparison_chart=<Data_Chart title="2026 Monthly Heat vs<br>Historical Average Monthly Heat" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
       charts_temp.push(comparison_chart);
 
       let difference_data:Record<string,any>={};
-      for(let month_column of summer_columns)
+      for(let month_column of month_columns)
       {
         difference_data[month_column]=current_average_data[month_column]-historical_average_data[month_column];
       }
       data_dictionary={"Heat Difference":difference_data};
-      let difference_chart=<Data_Chart title="2025 Monthly Heat vs<br>Historical Average Monthly Heat Difference" data_dictionary={data_dictionary} month_columns={summer_columns} ></Data_Chart>
+      let difference_chart=<Data_Chart title="2025 Monthly Heat vs<br>Historical Average Monthly Heat Difference" data_dictionary={data_dictionary} month_columns={month_columns} ></Data_Chart>
       charts_temp.push(difference_chart);
 
       setCharts(charts_temp);
